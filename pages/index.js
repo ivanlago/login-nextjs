@@ -1,19 +1,44 @@
-import { getCookie, deleteCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 import styles from "../styles/Form.module.css";
-import { useRouter } from 'next/router'
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from '../contexts/auth';
 
 export default function Home() {
-  const router = useRouter()
+  const { logout, user, getUsers } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleOut = () => {
-    deleteCookie('authorization');
-    router.push('/login');
+  useEffect(() => {
+    (async () => {
+      const response = await getUsers();
+      setUsers(response.data);
+      setLoading(false);
+    })();
+  }, []);
+
+
+  const handleLogout = async () => {
+    await logout();
+  }
+
+  if (loading) {
+    return <div>Carregando dados...</div>
   }
 
   return (
-    <div>
-      <h1>Página Privada - Perfil do Usuário</h1>
-      <button className={styles.button} onClick={handleOut}>Sair</button>
+    <div className="container">
+      <h1>HOME PAGE</h1>
+      <button className={styles.button} onClick={handleLogout}>Logout</button>
+      <p>Logado por: {user.email}</p>
+      <hr />
+      <h2>Lista de Usuários</h2>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            {user.id} - {user.email} - {user.name}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
