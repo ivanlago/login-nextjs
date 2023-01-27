@@ -16,22 +16,23 @@ export default function Home() {
     })();
   }, []);
 
-
   const handleLogout = async () => {
     await logout();
   }
+
+  const nameUser = user ? user.name : null;
 
   if (loading) {
     return <div>Carregando dados...</div>
   }
 
   return (
-    <div className="container">
+    <div className={styles.container}>
       <h1>HOME PAGE</h1>
+      <p className={styles.user}>Logado por: {nameUser}</p>
       <button className={styles.button} onClick={handleLogout}>Logout</button>
-      <p>Logado por: {user.email}</p>
       <hr />
-      <h2>Lista de Usuários</h2>
+      <h2 className={styles.list}>Lista de Usuários</h2>
       <ul>
         {users.map((user) => (
           <li key={user.id}>

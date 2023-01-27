@@ -12,19 +12,21 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const recoveredUser = localStorage.getItem('user');
-       // const token = localStorage.getItem('token');
         const token = getCookie('authorization')
-        console.log('auth', token);
         if (recoveredUser && token) {
             setUser(JSON.parse(recoveredUser));
         }
-        setLoading(false);
+        setLoading(false);   
     }, []);
 
     const newUser = async (data) => {   
-        const res = await axios.get('http://localhost:5000/users', data.email, data.password);
+        const res = await axios.get('http://localhost:5000/users');
+        console.log(res.status)
+        console.log(res.data)
         const checkUser = res.data?.filter((user) => user.email === data.email);
-        if (checkUser?.length) {            
+       // console.log(user.email -  data.email)
+        if (checkUser?.length) {
+            console.log(checkUser)  
             alert('Usuário ja existe');
             return;
         } else {
@@ -32,8 +34,7 @@ export const AuthProvider = ({ children }) => {
             const newRegister = response.data.user;
             alert('Usuário ' + newRegister.name + ' cadastrado com sucesso!!');
             router.push('/login')    
-        };       
-
+        };  
     };
 
     const login = async (data) => {   
@@ -45,10 +46,8 @@ export const AuthProvider = ({ children }) => {
 
               setCookie('authorization', token);              
               localStorage.setItem('user', JSON.stringify(loggedUser));
-             // localStorage.setItem('token', token);
               
-              setUser({loggedUser});
-              console.log(user);
+              setUser(loggedUser);
               router.push('/');
             }  
           } catch (err) {
@@ -61,8 +60,8 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         deleteCookie('authorization');
         localStorage.removeItem('user');
-        router.push('/login');
         setUser(null);
+        router.push('/login');        
     };
 
     const getUsers = async () => {

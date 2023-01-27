@@ -6,12 +6,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import loginSchema from "@/schemas/loginSchema";
-import { useRouter } from 'next/router'
 import { AuthContext } from '../contexts/auth';
 
 export default function LoginPage() { 
   const { login } = useContext(AuthContext); 
-  const router = useRouter()
   
   const {
     register,

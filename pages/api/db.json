@@ -4,19 +4,25 @@
       "email": "ivanslago@gmail.com",
       "password": "$2a$10$DuiN6Qbb3sH0o3BCuuswd.cxEv7vj8zQQby.jbzJWSGJWxnrkuFL6",
       "name": "Ivan Silva Lago",
-      "id": 1
+      "id": 2
     },
     {
       "email": "eleinefs@gmail.com",
       "password": "$2a$10$loqO1GtsnVpzM1TEJsW9tOWs5OTWczbAQeCrLaqQcCBxg/ZgynImu",
       "name": "Eleine SIqueira",
-      "id": 2
+      "id": 3
     },
     {
       "email": "ericslago@gmail.com",
       "password": "$2a$10$BWlWz0hymFepTsyZoDO5V.fWfqk7v0C9KhNgNvdJZ0EWZ4lEDulrm",
       "name": "Eric Lago",
-      "id": 3
+      "id": 4
+    },
+    {
+      "email": "ivanslf@gmail.com",
+      "password": "$2a$10$w0n9BBGcsMyNPRXpoL4qVuA2Ddq/g/pHJfM1214pPK4k.ER1Snq12",
+      "name": "Ivan Filho",
+      "id": 5
     }
   ]
 }

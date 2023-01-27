@@ -12,6 +12,10 @@
     margin-top: 10px;
 }
 
+.container {
+    text-align: center;
+}
+
 .link {
     align-self: flex-end;
 }
@@ -30,6 +34,12 @@
     margin-bottom: 10px;
 }
 
+.user {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: darkblue;
+}
+
 .button {
     background-color: blueviolet;
     color: #fff;
@@ -39,4 +49,10 @@
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    margin-bottom: 10px;
 }
+
+.list {
+    margin-top: 10px;
+}
+
