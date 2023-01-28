@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import styles from "../styles/Form.module.css";
 import LoginCard from "@/src/components/LoginCard/LoginCard";
 import Link from "next/link";
@@ -6,10 +5,13 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import loginSchema from "@/schemas/loginSchema";
-import { AuthContext } from '../contexts/auth';
+import axios from 'axios';
+import { loginToken } from "@/services/user";
+import { setCookie } from "cookies-next";
+import { useRouter } from 'next/router';
 
 export default function LoginPage() { 
-  const { login } = useContext(AuthContext); 
+  const router = useRouter();
   
   const {
     register,
@@ -19,7 +21,30 @@ export default function LoginPage() {
     resolver: yupResolver(loginSchema)
   });
 
-  const onSubmit = async data => await login(data);
+  const onSubmit = async data => {
+    const body =  data;
+    try {        
+        const res = await axios.get('/api/user/login');
+        const checkUser = res.data?.find((user) => user.email === data.email);
+        if (!checkUser) {
+          alert('User not found!')
+          return; 
+        } else {
+          
+          if (checkUser.password === data.password) {
+            setCookie('authorization', loginToken({name: checkUser.name, email: checkUser.email}));              
+            localStorage.setItem('user', JSON.stringify(checkUser));
+            await router.push('/');
+            alert('User authenticated successfully!')            
+          } else {
+            alert('Invalid password')
+          }
+        }
+       
+    } catch (error) {
+        console.error(error);
+    }
+}
 
   return (
     <div className={styles.background}>

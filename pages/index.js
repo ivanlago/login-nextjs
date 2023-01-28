@@ -1,26 +1,33 @@
-import { getCookie } from "cookies-next";
 import styles from "../styles/Form.module.css";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from '../contexts/auth';
+import { useEffect, useState } from "react";
+import axios from 'axios';
+import { readToken } from "@/services/user";
+import { useRouter } from 'next/router';
+import { deleteCookie, getCookie } from "cookies-next";
 
 export default function Home() {
-  const { logout, user, getUsers } = useContext(AuthContext);
+  const router = useRouter();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [dataUser, setDataUser] = useState(null);
+  const userToken = getCookie('authorization');
+  const nameUser = dataUser ? dataUser.name : null;
 
   useEffect(() => {
     (async () => {
-      const response = await getUsers();
+      const response = await axios.get('/api/user/login');
       setUsers(response.data);
+      setDataUser(readToken(userToken));
       setLoading(false);
     })();
   }, []);
 
   const handleLogout = async () => {
-    await logout();
+    deleteCookie('authorization');
+    localStorage.removeItem('user');  
+    setDataUser(null);
+    await router.push('/login');
   }
-
-  const nameUser = user ? user.name : null;
 
   if (loading) {
     return <div>Carregando dados...</div>

@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import styles from "../styles/Form.module.css";
 import LoginCard from "@/src/components/LoginCard/LoginCard";
 import Link from 'next/link';
@@ -7,17 +6,32 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import RegisterSchema from "@/schemas/RegisterSchema";
 import { useRouter } from 'next/router'
-import { AuthContext } from '../contexts/auth';
+import axios from 'axios';
 
 export default function RegisterPage() {
-    const { newUser } = useContext(AuthContext);
     const router = useRouter();
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(RegisterSchema)
       });
     
-    const onSubmit = async data => await newUser(data);
-    
+    const onSubmit = async data => {
+        const body =  data;
+        try {        
+            const res = await axios.get('/api/user/login');
+            const checkUser = res.data?.filter((user) => user.email === data.email);
+            if (checkUser?.length) {    
+                alert('User already exists!');
+                return;
+            } else {                       
+                await axios.post('/api/user/register', body);
+                alert('Successfully registered user!')
+                await router.push("/login");
+            }            
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <div className={styles.background}>        
             <LoginCard title='Register Page'>
